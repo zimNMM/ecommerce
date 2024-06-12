@@ -16,8 +16,29 @@ def index(request):
 
 def mobilephone(request):
     return render(request, 'shop/mobilephone.html')
+
 def laptop(request):
     return render(request, 'shop/laptop.html')
+
+def order_page(request):
+    product_name = request.GET.get('product', 'Unknown Product')
+    return render(request, 'order.html', {'product_name': product_name})
+
+def process_order(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        address = request.POST['address']
+        product = request.POST['product']
+        quantity = request.POST['quantity']
+        # Process the order here (e.g., save to database, send email, etc.)
+        return redirect('order_success')
+    else:
+        return redirect('order')
+    
+def order_success(request):
+    return render(request, 'order_success.html')
+
 
 #product detail view with product_id as parameter to get the product object and display the product details or 404 page if product not found
 def product_detail(request, product_id):

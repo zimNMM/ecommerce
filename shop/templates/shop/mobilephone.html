@@ -44,7 +44,8 @@
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-gray-800">Product 1</h3>
                     <p class="text-gray-600 mt-2">$39.99</p>
-                    <button class="bg-blue-500 text-white px-6 py-3 rounded-md mt-4">Order Now</button>
+                    <a href="{% url 'order' %}?product=Product+1" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-4 inline-block">Order Now</a>
+
                 </div>
             </div>
             <!-- Repeat similar blocks for other products -->
@@ -53,7 +54,8 @@
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-gray-800">Product 2</h3>
                     <p class="text-gray-600 mt-2">$49.99</p>
-                    <button class="bg-blue-500 text-white px-6 py-3 rounded-md mt-4">Order Now</button>
+                    <a href="{% url 'order' %}?product=Product+1" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-4 inline-block">Order Now</a>
+
                 </div>
             </div>
             <div class="bg-white shadow-md rounded-lg overflow-hidden">
@@ -61,7 +63,8 @@
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-gray-800">Product 3</h3>
                     <p class="text-gray-600 mt-2">$59.99</p>
-                    <button class="bg-blue-500 text-white px-6 py-3 rounded-md mt-4">Order Now</button>
+                    <a href="{% url 'order' %}?product=Product+1" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-4 inline-block">Order Now</a>
+
                 </div>
             </div>
             <!-- Add more products as needed -->
