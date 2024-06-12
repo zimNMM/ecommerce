@@ -16,7 +16,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField()
     available = models.BooleanField(default=True)
-    image = models.ImageField(upload_to='products/', blank=True, null=True)
+    image = models.ImageField(upload_to='products/', blank=False, null=False)
     product_id = models.CharField(max_length=100, unique=True, blank=True)
     
     def __str__(self):
@@ -95,3 +95,48 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f'{self.product.name} in order {self.order.order_id}'
+
+class Wishlist(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    products = models.ManyToManyField(Product, through='WishlistItem')
+
+    def __str__(self):
+        return f'Wishlist of {self.user.username}'
+
+class WishlistItem(models.Model):
+    wishlist = models.ForeignKey(Wishlist, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.product.name} in wishlist of {self.wishlist.user.username}'
+    
+class Review(models.Model):
+    product = models.ForeignKey(Product, related_name='reviews', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.PositiveIntegerField()
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Review by {self.user.username} for {self.product.name}'
+class OrderHistory(models.Model):
+    user = models.ForeignKey(User, related_name='order_history', on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, related_name='history', on_delete=models.CASCADE)
+    status = models.CharField(max_length=20, choices=Order.STATUS_CHOICES)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Order history for {self.user.username}'
+    
+class Shipping(models.Model):
+    order = models.OneToOneField(Order, related_name='shipping', on_delete=models.CASCADE)
+    address = models.TextField()
+    city = models.CharField(max_length=100)
+    postal_code = models.CharField(max_length=20)
+    country = models.CharField(max_length=100)
+    tracking_number = models.CharField(max_length=100, blank=True, null=True)
+    shipped_at = models.DateTimeField(blank=True, null=True)
+    delivered_at = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return f'Shipping info for order {self.order.order_id}'
