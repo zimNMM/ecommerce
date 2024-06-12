@@ -13,7 +13,6 @@
         <div class="container mx-auto flex justify-between items-center">
             <div class="text-2xl font-bold text-gray-800"><a href="{% url 'index' %}">eShop</a></div>
             <div>
-        
                 <!-- Add other links as needed -->
             </div>
             <div>
@@ -29,7 +28,7 @@
                         <button class="bg-green-500 text-white px-4 py-2 rounded-md">Register</button>
                     </a>
                 {% endif %}
-            </div>    
+            </div>
         </div>
     </header>
 
@@ -37,18 +36,35 @@
     <main class="container mx-auto py-10">
         <section class="text-center mb-12">
             <h1 class="text-4xl font-bold text-gray-800 mb-4">Mobile Phones</h1>
-            
         </section>
 
         <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                <img src="path/to/Mobile.jpg" alt="Mobile Phone " class="w-full h-48 object-cover">
+                <img src="path/to/Mobile.jpg" alt="Mobile Phone" class="w-full h-48 object-cover">
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-gray-800">Product 1</h3>
                     <p class="text-gray-600 mt-2">$39.99</p>
+                    <button class="bg-blue-500 text-white px-6 py-3 rounded-md mt-4">Order Now</button>
                 </div>
             </div>
             <!-- Repeat similar blocks for other products -->
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <img src="path/to/Mobile2.jpg" alt="Mobile Phone" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-800">Product 2</h3>
+                    <p class="text-gray-600 mt-2">$49.99</p>
+                    <button class="bg-blue-500 text-white px-6 py-3 rounded-md mt-4">Order Now</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <img src="path/to/Mobile3.jpg" alt="Mobile Phone" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-800">Product 3</h3>
+                    <p class="text-gray-600 mt-2">$59.99</p>
+                    <button class="bg-blue-500 text-white px-6 py-3 rounded-md mt-4">Order Now</button>
+                </div>
+            </div>
+            <!-- Add more products as needed -->
         </section>
     </main>
 
