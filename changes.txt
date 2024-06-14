@@ -1,0 +1,3 @@
+Migrations for 'shop':
+  shop\migrations\0004_alter_review_rating.py
+    - Alter field rating on review

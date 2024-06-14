@@ -52,10 +52,10 @@
             
             <!-- Add to Cart/Wishlist buttons -->
             {% if user.is_authenticated %}
-            <form method="post" action="{% url 'add_to_cart' product.product_id %}">
+            <form method="post" action="{% url 'add_to_cart' product.id %}">
                 {% csrf_token %}
                 <button type="submit" class="bg-green-500 text-white px-6 py-3 rounded-md">Add to Cart</button>
-                <a href="{% url 'add_to_wishlist' product.product_id %}" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md mt-2 inline-block ml-2">Add to Wishlist</a>    
+                <a href="{% url 'add_to_wishlist' product.id %}" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md mt-2 inline-block ml-2">Add to Wishlist</a>    
             </form>
             {% else %}
             <a href="{% url 'login'%}"><button type="submit" class="bg-green-500 text-white px-6 py-3 rounded-md">Add to Cart</button></a>
@@ -64,17 +64,57 @@
             <!-- User Reviews Section -->
             <div class="mt-8">
                 <h2 class="text-2xl font-bold mb-4">User Reviews</h2>
+
+                <!-- Display Existing Reviews -->
                 <ul class="divide-y divide-gray-300">
                     {% for review in reviews %}
                     <li class="py-4">
-                        <p class="text-gray-800 font-bold">{{ review.user }}</p>
+                        <p class="text-gray-800 font-bold">{{ review.user.username }}</p>
                         <p class="text-gray-600">{{ review.comment }}</p>
                         <p class="text-gray-400 text-sm mt-2">{{ review.created_at|date:"F d, Y" }}</p>
+                        {% if review.rating %}
+                            <p class="text-yellow-400">
+                                Rating:
+                                {% with review.rating|add:0 as rating %}
+                                    {% for star in "12345" %}
+                                        {% if star|add:0 <= rating %}
+                                            <i class="fas fa-star"></i>
+                                        {% else %}
+                                            <i class="far fa-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endwith %}
+                            </p>
+                        {% endif %}
+                        {% if request.user == review.user %}
+                            <a href="{% url 'delete_review' review.id %}" class="text-red-500">Delete</a>
+                        {% endif %}
                     </li>
                     {% empty %}
                     <li class="py-4 text-gray-500">No reviews yet.</li>
                     {% endfor %}
                 </ul>
+                
+                <!-- Form for New Review -->
+                {% if user.is_authenticated %}
+                <form method="post" action="{% url 'add_review' product.id %}">
+                    {% csrf_token %}
+                    {{ review_form.as_p }}
+                    <div class="mt-2">
+                        <label for="id_rating" class="block text-sm font-medium text-gray-700">Rating:</label>
+                    </div>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">Submit Review</button>
+                </form>
+                {% else %}
+                <p class="text-gray-600">Please <a href="{% url 'login' %}">login</a> to leave a review.</p>
+                {% endif %}
+
+                <!-- Display Success Message -->
+                {% if new_review %}
+                <div class="mt-4">
+                    <p class="text-green-500">Thank you for your review!</p>
+                </div>
+                {% endif %}
             </div>
 
         </section>

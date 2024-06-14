@@ -3,9 +3,9 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth import authenticate
 from django.contrib import messages
-from shop.forms import OrderForm
+from shop.forms import OrderForm, ReviewForm
 from .decorators import redirect_authenticated_user, login_required_user
-from .models import Order, OrderItem, Product, Cart, CartItem, Category,Wishlist,WishlistItem
+from .models import Order, OrderItem, Product, Cart, CartItem, Category,Wishlist,WishlistItem, Review
 # Create your views here.
 
 @login_required_user
@@ -44,7 +44,13 @@ def accessories(request):
 #product detail view with product_id as parameter to get the product object and display the product details or 404 page if product not found
 def product_detail(request, product_id):
     product = get_object_or_404(Product, product_id=product_id)
-    return render(request, 'shop/product.html', {'product': product})
+    reviews = Review.objects.filter(product=product)
+    
+    context = {
+        'product': product,
+        'reviews': reviews,
+    }
+    return render(request, 'shop/product_detail.html', {'product': product, 'reviews': reviews})
 
 #create the register view using shop/register.html template
 @redirect_authenticated_user
@@ -193,3 +199,40 @@ def remove_from_wishlist(request, product_id):
     wishlist_item = get_object_or_404(WishlistItem, wishlist=wishlist, product=product)
     wishlist_item.delete()
     return redirect('wishlist')
+
+@login_required_user
+def add_review(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    reviews = Review.objects.filter(product=product)
+
+    if request.method == 'POST':
+        review_form = ReviewForm(request.POST)
+        if review_form.is_valid():
+            new_review = review_form.save(commit=False)
+            new_review.product = product
+            new_review.user = request.user  
+            new_review.save()
+            messages.success(request, 'Your review has been submitted.')
+            return redirect('product_detail', product_id=product_id)
+        else:
+            messages.error(request, 'There was an error submitting your review.')
+    else:
+        review_form = ReviewForm()
+
+    return render(request, 'shop/product_detail.html', {
+        'product': product,
+        'review_form': review_form,
+        'reviews': reviews,
+    })
+
+@login_required_user
+def delete_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id, user=request.user)
+
+    if request.method == 'POST':
+        review.delete()
+        messages.success(request, 'Your review has been deleted.')
+        return redirect('product_detail', product_id=review.product.product_id)
+
+    return render(request, 'shop/confirm_delete_review.html', {'review': review})
+

@@ -32,6 +32,7 @@ urlpatterns = [
     path('product/<str:product_id>/', views.product_detail, name='product_detail'),
     path('add-to-cart/<str:product_id>/', views.add_to_cart, name='add_to_cart'),
     path('cart/', views.cart, name='cart'),
+    path('add-to-cart/<str:product_id>/', views.add_to_cart, name='add_to_cart'),
     path('remove-from-cart/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('clear-cart/', views.clear_cart, name='clear_cart'),
     path('checkout/', views.checkout, name='checkout'),
@@ -40,7 +41,8 @@ urlpatterns = [
     path('wishlist/', views.wishlist, name='wishlist'),
     path('add-to-wishlist/<str:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
     path('remove-from-wishlist/<str:product_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
-
+    path('add-review/<str:product_id>/', views.add_review, name='add_review'),
+    path('delete_review/<int:review_id>/', views.delete_review, name='delete_review'), 
 ]
 
 if settings.DEBUG:
